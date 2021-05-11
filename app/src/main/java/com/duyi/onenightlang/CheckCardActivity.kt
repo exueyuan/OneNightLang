@@ -27,6 +27,7 @@ class CheckCardActivity : AppCompatActivity() {
         CardData("猎人", type = CardType.Lieren, isShowNum = false),
         CardData("皮匠", type = CardType.Pijiang, isShowNum = false),
         CardData("强盗", type = CardType.Qiangdao, isShowNum = false),
+        CardData("失眠者", type = CardType.Shimianzhe, isShowNum = false),
         CardData("村民", type = CardType.Cunmin, isShowNum = false),
         CardData("村民", type = CardType.Cunmin, isShowNum = false)
     )
