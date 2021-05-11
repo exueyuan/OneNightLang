@@ -30,6 +30,10 @@ class DataUtils {
         }
 
         fun getPlayerNum(arrayNum: Int, startNum: Int, dmNum: Int = -1): Int {
+            if (dmNum < 0) {
+                return arrayNum + startNum
+            }
+
             return if (arrayNum + startNum < dmNum) {
                 arrayNum + startNum
             } else {
