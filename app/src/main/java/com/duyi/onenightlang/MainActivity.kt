@@ -1,5 +1,6 @@
 package com.duyi.onenightlang
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.duyi.onenightlang.adapter.CardAdapter
 import com.duyi.onenightlang.data.CardData
 import com.duyi.onenightlang.data.CardType
+import com.duyi.onenightlang.data.ClipDataUtils
 import com.duyi.onenightlang.utils.DataUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -157,6 +159,7 @@ class MainActivity : AppCompatActivity() {
     val qiyeCardTypeList = arrayListOf<CardType>()
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -200,9 +203,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        tv_role_list.text = order_show
+        tv_role_list.text = "$order_show（点击复制）"
         tv_qiye_role.text = qiye_order
 
+        clip_root.setOnClickListener {
+            ClipDataUtils.clipData(this, tv_role_list.text.toString())
+        }
 //
 //        cardDataList.add(CardData("狼人"))
 //        cardDataList.add(CardData("狼人"))
@@ -222,7 +228,7 @@ class MainActivity : AppCompatActivity() {
             clearAllCardData()
             setGone()
             this.qiye_order += 1
-            if(this.qiye_order < qiyeCardTypeList.size) {
+            if (this.qiye_order < qiyeCardTypeList.size) {
                 checkQiyeType(qiyeCardTypeList[this.qiye_order])
             } else {
                 checkNone()
@@ -267,13 +273,13 @@ class MainActivity : AppCompatActivity() {
         updateAdapter()
 
         qiye_order = 0
-        if(qiye_order < qiyeCardTypeList.size) {
+        if (qiye_order < qiyeCardTypeList.size) {
             checkQiyeType(qiyeCardTypeList[qiye_order])
         }
     }
 
     private fun checkQiyeType(cardType: CardType) {
-        when(cardType) {
+        when (cardType) {
             CardType.Langren -> checkLangren()
             CardType.Zhaoya -> checkZhaoya()
             CardType.Yuyanjia -> checkYuyanjia()
