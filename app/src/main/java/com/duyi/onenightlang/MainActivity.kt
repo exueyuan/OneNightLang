@@ -10,19 +10,11 @@ import com.duyi.onenightlang.data.CardData
 import com.duyi.onenightlang.data.CardType
 import com.duyi.onenightlang.utils.DataUtils
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
-
-
-    private val cardOrderList = arrayListOf(
-        CardType.Langren,
-        CardType.Zhaoya,
-        CardType.Yuyanjia,
-        CardType.Qiangdao,
-        CardType.Daodangui,
-        CardType.JiuGui,
-        CardType.Shimianzhe
-    )
+    var qiye_order = 0
 
     private var doing_type: CardType = CardType.None
     private val cardDataList = arrayListOf<CardData>()
@@ -160,8 +152,9 @@ class MainActivity : AppCompatActivity() {
         updateAdapter()
     }
 
-    var start_num = 2
-    var dm_num = 4
+    var start_num = 1
+    var dm_num = -1
+    val qiyeCardTypeList = arrayListOf<CardType>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -175,22 +168,51 @@ class MainActivity : AppCompatActivity() {
         val public_layoutManager = GridLayoutManager(this, 4)
         rv_center_list.layoutManager = public_layoutManager
         rv_center_list.adapter = publicCardAdapter
-
-        start_num = 2
-        dm_num = 4
+        start_num = intent.getIntExtra("startNum", 1)
+        dm_num = intent.getIntExtra("dmNum", -1)
+        val dataList: ArrayList<CardData> =
+            intent.getSerializableExtra("cardData") as ArrayList<CardData>
 
         playerCardAdapter.setStartNumDmNum(start_num, dm_num)
 
         // 获取datalist
-        cardDataList.add(CardData("狼人"))
-        cardDataList.add(CardData("狼人"))
-        cardDataList.add(CardData("爪牙"))
-        cardDataList.add(CardData("预言家"))
-        cardDataList.add(CardData("强盗"))
-        cardDataList.add(CardData("捣蛋鬼"))
-        cardDataList.add(CardData("酒鬼"))
-        cardDataList.add(CardData("失眠者"))
-        cardDataList.add(CardData("皮匠"))
+        for (data in dataList) {
+            data.isShowNum = true
+            data.isSeleted = false
+            cardDataList.add(data)
+        }
+
+        cardDataList.sortWith(Comparator { card1, card2 ->
+            if (card1.type.order - card2.type.order >= 0) {
+                1
+            } else {
+                -1
+            }
+        })
+        var order_show = "角色配置:"
+        var qiye_order = "起夜顺序:"
+        for (cardData in cardDataList) {
+            order_show += cardData.cardName + ","
+            if (cardData.type.isQiye) {
+                if (cardData.type !in qiyeCardTypeList) {
+                    qiye_order += cardData.cardName + ","
+                    qiyeCardTypeList.add(cardData.type)
+                }
+            }
+        }
+        tv_role_list.text = order_show
+        tv_qiye_role.text = qiye_order
+
+//
+//        cardDataList.add(CardData("狼人"))
+//        cardDataList.add(CardData("狼人"))
+//        cardDataList.add(CardData("爪牙"))
+//        cardDataList.add(CardData("预言家"))
+//        cardDataList.add(CardData("强盗"))
+//        cardDataList.add(CardData("捣蛋鬼"))
+//        cardDataList.add(CardData("酒鬼"))
+//        cardDataList.add(CardData("失眠者"))
+//        cardDataList.add(CardData("皮匠"))
 
 
         startGame(cardDataList)
@@ -199,17 +221,11 @@ class MainActivity : AppCompatActivity() {
         bt_next.setOnClickListener {
             clearAllCardData()
             setGone()
-            when (doing_type) {
-                CardType.Langren -> checkZhaoya()
-                CardType.Zhaoya -> checkYuyanjia()
-                CardType.Yuyanjia -> checkQiangdao()
-                CardType.Qiangdao -> checkDaoangui()
-                CardType.Daodangui -> checkJiuGui()
-                CardType.JiuGui -> checkShimianzhe()
-                CardType.Shimianzhe -> checkNone()
-                else -> {
-
-                }
+            this.qiye_order += 1
+            if(this.qiye_order < qiyeCardTypeList.size) {
+                checkQiyeType(qiyeCardTypeList[this.qiye_order])
+            } else {
+                checkNone()
             }
         }
 
@@ -250,7 +266,23 @@ class MainActivity : AppCompatActivity() {
 
         updateAdapter()
 
-        checkLangren()
+        qiye_order = 0
+        if(qiye_order < qiyeCardTypeList.size) {
+            checkQiyeType(qiyeCardTypeList[qiye_order])
+        }
+    }
+
+    private fun checkQiyeType(cardType: CardType) {
+        when(cardType) {
+            CardType.Langren -> checkLangren()
+            CardType.Zhaoya -> checkZhaoya()
+            CardType.Yuyanjia -> checkYuyanjia()
+            CardType.Qiangdao -> checkQiangdao()
+            CardType.Daodangui -> checkDaoangui()
+            CardType.JiuGui -> checkJiuGui()
+            CardType.Shimianzhe -> checkShimianzhe()
+            else -> checkNone()
+        }
     }
 
     private fun checkShimianzhe() {

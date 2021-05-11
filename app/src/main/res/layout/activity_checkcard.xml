@@ -41,6 +41,7 @@
                 android:text="玩家座位起始数：" />
 
             <EditText
+                android:id="@+id/et_start_num"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -48,6 +49,7 @@
                 android:text="1" />
 
             <TextView
+                android:id="@+id/et_dm_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"

@@ -11,15 +11,20 @@ class CardData(
     var isSeleted: Boolean = false,
     var isShowNum: Boolean = true,
     var type: CardType = CardType.None
-) : Serializable
+) : Serializable {
 
-enum class CardType {
-    None,
-    Langren,
-    Zhaoya,
-    Yuyanjia,
-    Daodangui,
-    JiuGui,
-    Qiangdao,
-    Shimianzhe
+}
+
+enum class CardType(val order: Int, val isQiye:Boolean) {
+    None(10000, false),
+    Langren(1, true),
+    Zhaoya(2, true),
+    Yuyanjia(3, true),
+    Qiangdao(4, true),
+    Daodangui(5, true),
+    JiuGui(6, true),
+    Shimianzhe(7, true),
+    Lieren(8, false),
+    Pijiang(9, false),
+    Cunmin(10, false)
 }
