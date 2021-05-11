@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var doing_type: CardType = CardType.None
+    private val cardDataList = arrayListOf<CardData>()
 
     private val startPlayerCardList = arrayListOf<CardData>()
     private val startPublicCardList = arrayListOf<CardData>()
@@ -172,13 +173,12 @@ class MainActivity : AppCompatActivity() {
         rv_center_list.layoutManager = public_layoutManager
         rv_center_list.adapter = publicCardAdapter
 
-        var start_num = 2
-        var dm_num = 4
+        start_num = 2
+        dm_num = 4
 
         playerCardAdapter.setStartNumDmNum(start_num, dm_num)
 
         // 获取datalist
-        val cardDataList = arrayListOf<CardData>()
         cardDataList.add(CardData("狼人"))
         cardDataList.add(CardData("狼人"))
         cardDataList.add(CardData("预言家"))
@@ -186,7 +186,44 @@ class MainActivity : AppCompatActivity() {
         cardDataList.add(CardData("捣蛋鬼"))
         cardDataList.add(CardData("酒鬼"))
         cardDataList.add(CardData("失眠者"))
+
+
+        startGame(cardDataList)
+
+
+        bt_next.setOnClickListener {
+            clearAllCardData()
+            setGone()
+            when (doing_type) {
+                CardType.Langren -> checkYuyanjia()
+                CardType.Yuyanjia -> checkQiangdao()
+                CardType.Qiangdao -> checkDaoangui()
+                CardType.Daodangui -> checkJiuGui()
+                CardType.JiuGui -> checkShimianzhe()
+                CardType.Shimianzhe -> checkNone()
+                else -> {
+
+                }
+            }
+        }
+
+        tv_restart.setOnClickListener {
+            startGame(cardDataList)
+        }
+
+        tv_back.setOnClickListener {
+            finish()
+        }
+
+    }
+
+    override fun onBackPressed() {
+
+    }
+
+    private fun startGame(cardDataList: ArrayList<CardData>) {
         val randomDataList = DataUtils.randomList(cardDataList)
+        cardDataList.addAll(randomDataList)
 
         playerCardDataList.clear()
         publicCardDataList.clear()
@@ -205,23 +242,6 @@ class MainActivity : AppCompatActivity() {
         updateAdapter()
 
         checkLangren()
-
-        bt_next.setOnClickListener {
-            clearAllCardData()
-            setGone()
-            when (doing_type) {
-                CardType.Langren -> checkYuyanjia()
-                CardType.Yuyanjia -> checkQiangdao()
-                CardType.Qiangdao -> checkDaoangui()
-                CardType.Daodangui -> checkJiuGui()
-                CardType.JiuGui -> checkShimianzhe()
-                CardType.Shimianzhe -> checkNone()
-                else -> {
-
-                }
-            }
-        }
-
     }
 
     private fun checkShimianzhe() {
