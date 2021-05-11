@@ -7,20 +7,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.duyi.onenightlang.adapter.CardAdapter
 import com.duyi.onenightlang.data.CardData
+import com.duyi.onenightlang.data.CardType
 import com.duyi.onenightlang.utils.DataUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    enum class CardType {
-        None,
-        Langren,
-        Zhaoya,
-        Yuyanjia,
-        Daodangui,
-        JiuGui,
-        Qiangdao,
-        Shimianzhe
-    }
+
 
     private val cardOrderList = arrayListOf(
         CardType.Langren,

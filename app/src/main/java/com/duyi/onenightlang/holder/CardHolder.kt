@@ -45,5 +45,10 @@ class CardHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.setOnClickListener {
             checkCallback?.invoke(position, player_num, cardData)
         }
+        if(cardData.isShowNum) {
+            tv_player_num.visibility = View.VISIBLE
+        } else {
+            tv_player_num.visibility = View.GONE
+        }
     }
 }
