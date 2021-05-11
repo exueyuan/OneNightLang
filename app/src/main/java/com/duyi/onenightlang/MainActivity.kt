@@ -14,12 +14,23 @@ class MainActivity : AppCompatActivity() {
     enum class CardType {
         None,
         Langren,
+        Zhaoya,
         Yuyanjia,
         Daodangui,
         JiuGui,
         Qiangdao,
         Shimianzhe
     }
+
+    private val cardOrderList = arrayListOf(
+        CardType.Langren,
+        CardType.Zhaoya,
+        CardType.Yuyanjia,
+        CardType.Qiangdao,
+        CardType.Daodangui,
+        CardType.JiuGui,
+        CardType.Shimianzhe
+    )
 
     private var doing_type: CardType = CardType.None
     private val cardDataList = arrayListOf<CardData>()
@@ -181,6 +192,7 @@ class MainActivity : AppCompatActivity() {
         // 获取datalist
         cardDataList.add(CardData("狼人"))
         cardDataList.add(CardData("狼人"))
+        cardDataList.add(CardData("爪牙"))
         cardDataList.add(CardData("预言家"))
         cardDataList.add(CardData("强盗"))
         cardDataList.add(CardData("捣蛋鬼"))
@@ -196,7 +208,8 @@ class MainActivity : AppCompatActivity() {
             clearAllCardData()
             setGone()
             when (doing_type) {
-                CardType.Langren -> checkYuyanjia()
+                CardType.Langren -> checkZhaoya()
+                CardType.Zhaoya -> checkYuyanjia()
                 CardType.Yuyanjia -> checkQiangdao()
                 CardType.Qiangdao -> checkDaoangui()
                 CardType.Daodangui -> checkJiuGui()
@@ -217,6 +230,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
     override fun onBackPressed() {
 
@@ -467,6 +481,39 @@ class MainActivity : AppCompatActivity() {
             tv_result.visibility = View.VISIBLE
             bt_next.visibility = View.VISIBLE
             tv_result.text = "已经进行交换"
+        }
+
+    }
+
+    private fun checkZhaoya() {
+        doing_type = CardType.Zhaoya
+        tv_name.text = "爪牙"
+        var zhaoyaCardData: CardData? = null
+        var startZhaoyaPosition = 0
+        for (i in 0 until startPlayerCardList.size) {
+            if (startPlayerCardList[i].cardName == "爪牙") {
+                zhaoyaCardData = startPlayerCardList[i]
+                startZhaoyaPosition = i
+            }
+        }
+        if (zhaoyaCardData == null) {
+            tv_desc.text = "场上无爪牙"
+            bt_next.visibility = View.VISIBLE
+            bt_ok.visibility = View.GONE
+        } else {
+            tv_name.text =
+                "爪牙:${DataUtils.getPlayerNum(startZhaoyaPosition, start_num, dm_num)}"
+            val langrenPositionList = arrayListOf<Int>()
+            var showText = ""
+            for (i in 0 until startPlayerCardList.size) {
+                if (startPlayerCardList[i].cardName.contains("狼")) {
+                    langrenPositionList.add(i)
+                    showText += DataUtils.getPlayerNum(i, start_num, dm_num).toString() + ","
+                }
+            }
+            tv_desc.text = "场上的狼人为：$showText"
+            bt_next.visibility = View.VISIBLE
+            bt_ok.visibility = View.GONE
         }
 
     }
