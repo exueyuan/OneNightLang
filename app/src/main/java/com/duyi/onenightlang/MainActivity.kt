@@ -186,6 +186,7 @@ class MainActivity : AppCompatActivity() {
         cardDataList.add(CardData("捣蛋鬼"))
         cardDataList.add(CardData("酒鬼"))
         cardDataList.add(CardData("失眠者"))
+        cardDataList.add(CardData("皮匠"))
 
 
         startGame(cardDataList)
@@ -238,6 +239,8 @@ class MainActivity : AppCompatActivity() {
         }
         startPlayerCardList.addAll(playerCardDataList)
         startPublicCardList.addAll(publicCardDataList)
+
+        setGone()
 
         updateAdapter()
 
